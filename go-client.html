@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .nav-bar {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .nav-bar .right-item {
+      margin-left: 10px;
+    }
+
+    .title {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .label {
+      font-size: 14px;
+    }
+
+    .field-container {
+      margin-top: 10px;
+    }
+
+    .input-text {
+      padding: 5px;
+      height: 20px;
+      width: calc(100% - 14px);
+      /* border: 1px; */
+    }
+
+    .select {
+      padding: 5px;
+      height: 35px;
+      width: calc(100%);
+    }
+
+    .button-container {
+      margin-top: 20px;
+    }
+
+    .button {
+      height: 35px;
+      width: 100%;
+    }
+
+    .form {
+      max-width: 300px;
+      margin: auto;
+    }
+
+    .tests-container {
+      max-width: 700px;
+      margin: 20px auto;
+    }
+
+    .tests-container .header {
+      display: flex;
+      height: 30px;
+      padding: 5px 10px;
+    }
+
+    .tests-list {
+      overflow-y: auto;
+      height: 400px;
+      overflow-y: auto;
+      background-color: #f8f8f8;
+      padding: 10px 0;
+    }
+
+    .tests-container .row {
+      display: flex;
+      height: 25px;
+      padding: 5px 10px;
+    }
+
+    .tests-container .server {
+      width: 40%;
+      text-align: left;
+      padding-right: 10px;
+      overflow: hidden;
+    }
+
+    .tests-container .case {
+      width: 40%;
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .tests-container .first {
+      width: 40%;
+      text-align: right;
+      overflow: hidden;
+    }
+
+    .tests-container .time {
+      width: 40%;
+      text-align: right;
+      overflow: hidden;
+    }
+
+    .warning-message {
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav-bar">
+    <a href="/go-client">QUERY TEST</a>
+    <a href="/go-client/mutation" class="right-item">MUTACI&Oacute;N</a>
+  </div>
+  <div>
+    <h1 class="title">
+      Go Web Client
+    </h1>
+    <div class="form">
+      <form action="/go-client" method="post">
+        <div class="field-container">
+          <label for="firstUsers" class="label">Usuarios</label>
+          <div>
+            <input id="firstUsers" name="firstUsers" type="text" class="input-text" value="{{ .firstUsers }}" />
+          </div>
+        </div>
+        <div class="field-container">
+          <label for="serverType" class="label">Servidor</label>
+          <div>
+            <select id="serverType" name="serverType" class="select">
+              <option value="JS" {{ if eq .serverType "JS" }} selected {{ end }}>JavaScript</option>
+              <option value="PYTHON" {{ if eq .serverType "PYTHON" }} selected {{ end }}>Python</option>
+              <option value="GO" {{ if eq .serverType "GO" }} selected {{ end }}>Go</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-container">
+          <label for="caseId" class="label">Caso</label>
+          <div>
+            <select id="caseId" name="caseId" class="select">
+              <option value="case1" {{ if eq .caseId "case1" }} selected {{ end }}>Caso 1</option>
+              <option value="case2" {{ if eq .caseId "case2" }} selected {{ end }}>Caso 2</option>
+              <option value="case3" {{ if eq .caseId "case3" }} selected {{ end }}>Caso 3</option>
+            </select>
+          </div>
+        </div>
+        <div class="button-container">
+          {{ if eq .InvalidForm true }}
+          <div class="warning-message">El formulario no es v&aacute;lido</div>
+          {{ end }}
+          {{ if eq .Querying true }}
+          <div class="warning-message">Consulta en progreso</div>
+          {{ end }}
+          <input id="submitButton" type="submit" class="button" value="CONSULTAR" />
+        </div>
+      </form>
+    </div>
+    <div class="tests-container">
+      <div class="header">
+        <div class="server">
+          SERVIDOR
+        </div>
+        <div class="case">
+          CASO
+        </div>
+        <div class="first">
+          USUARIOS
+        </div>
+        <div class="time">
+          TIEMPO (segundos)
+        </div>
+      </div>
+      <div id="testsList" class="tests-list">
+        {{ range $t := .tests}}
+        <div class="row">
+          <div class="server">
+            {{$t.ServerName}}
+          </div>
+          <div class="case">
+            {{$t.CaseName}}
+          </div>
+          <div class="first">
+            {{$t.FirstUsers}}
+          </div>
+          <div class="time">
+            {{$t.Time}}
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</body>
